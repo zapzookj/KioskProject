@@ -137,14 +137,18 @@ public class Main {
         handleAddOrder(choice3, productList); // 주문 결과 창으로 넘어감
     }
 
-    static void addShotOption(Product product){
+    static int addShotOption(Product product){
         System.out.println(product.name + "   |" + product.price + "원   |" + product.description);
         System.out.println("커피에 샷을 추가하시겠습니까?");
         System.out.println("1. One shot add(500원)     2. Two shot add(1000원)     3. 샷 추가 X");
         int choice = getUserChoice();
-        if(choice == 1 || choice == 2){
-            product.addShot(product, choice);
-        }
+        return choice;
+//        if(choice == 1 || choice == 2){
+//            product.addShot(product, choice);
+////            System.out.println(product.name + "   |" + product.price + "   |" + product.description); // 다 잘 동작하다가 여기서 무조건 에스프레소가 출력됨
+////            System.out.println("위 메뉴를 장바구니에 추가하시겠습니까?");
+////            System.out.println("1. 확인      2. 취소");
+//        }
     }
     static void handleAddOrder(int choice, List<Product> productList){
         if(choice == 1){ // 입력받은 숫자에 따라 주문 결과를 출력
