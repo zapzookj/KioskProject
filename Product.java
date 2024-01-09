@@ -15,7 +15,7 @@ public class Product extends Menu{
         }
     }
     void displayOrder(List<Product> products, int num){
-        Product product = products.get(num);
+        Product product = products.get(num-1); // 배열은 0부터 시작..
         super.name = product.name;
         super.description = product.description;
         this.price = product.price;

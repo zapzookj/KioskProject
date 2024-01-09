@@ -81,6 +81,8 @@ public class Main {
             handleMainMenuChoice(choice, "Cake");
         } else if (choice == 5) {
             showCart();
+        } else if (choice == 6) {
+            cancelOrder();
         }
         else {
             System.out.println("잘못된 값이 입력되었습니다. 메인 메뉴로 돌아갑니다.");
@@ -146,6 +148,28 @@ public class Main {
         System.out.println("[ Total ]");
         System.out.println(total_price + "원\n");
         System.out.println("1. 주문      2. 메뉴판");
+    }
+
+    static void cancelOrder(){
+        System.out.println("진행중인 주문을 취소하시겠습니까?");
+        System.out.println("1. 확인     2. 취소");
+        int choice = getUserChoice();
+        if(choice == 1){
+            clearCart();
+        }else if(choice == 2){
+            System.out.println("취소하셨습니다. 메인 메뉴판으로 돌아갑니다");
+            displayMainMenu();
+        }else{
+            System.out.println("잘못된 값이 입력되었습니다. 메인 메뉴판으로 돌아갑니다");
+            displayMainMenu();
+        }
+    }
+
+    static void clearCart(){
+        System.out.println("진행중인 주문이 모두 취소되었습니다.");
+        Cart.clear();
+        total_price = 0;
+        displayMainMenu();
     }
 
     static int getUserChoice() {
