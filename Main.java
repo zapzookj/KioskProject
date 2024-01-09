@@ -4,17 +4,19 @@ import java.util.*;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
-    static Map<String, Menu> menus = new HashMap<>();
-    static Map<String, Product> products = new HashMap<>();
+    static Map<String, List<Menu>> menus = new HashMap<>();
+    static Map<String, List<Product>> products = new HashMap<>();
+    static List<Product> Cart = new ArrayList<>();
+    static int total_price;
 
 
     public static void main(String[] args) {
         displayMainMenu();
     }
 
-    static void InitialMenu() {
-        List<Menu> mainMenus = new ArrayList<>();
-        mainMenus.add(new Menu("Coffee", "좋은 원두를 사용하는 맛있는 커피"));
+    static void InitialMenu() { // 메뉴판에 들어가야하는 메타 데이터를 초기화하는 메서드
+        List<Menu> mainMenus = new ArrayList<>(); // 메인 메뉴판의 정보를 담을 리스트 선언(Menu 생성자 이용)
+        mainMenus.add(new Menu("Coffee", "좋은 원두를 사용하는 맛있는 커피")); // 리스트에 각 카테고리의 내용을 추가
         mainMenus.add(new Menu("Beverage", "매장에서 직접 만드는 다양한 음료수"));
         mainMenus.add(new Menu("Bread", "갓 구운 맛있는 빵"));
         mainMenus.add(new Menu("Cake", "뭔가 특별한 케이크"));
@@ -23,18 +25,11 @@ public class Main {
         orderMenus.add(new Menu("Order", "장바구니를 확인 후 주문합니다."));
         orderMenus.add(new Menu("Cancel", "진행중인 주문을 취소합니다."));
 
-        Map<String, Menu> menus = new HashMap<>();
-//        menus.put("Main menu", mainMenus);
-//        menus.put("Order menu", orderMenus);
-        for (Menu menu : mainMenus) {
-            menus.put(menu.name, menu);
-        }
-        for (Menu menu : orderMenus) {
-            menus.put(menu.name, menu);
-        }
+        menus.put("Main menu", mainMenus); // 선언한 리스트를 키값과 함께 전역변수로 선언해둔 해쉬맵에 저장
+        menus.put("Order menu", orderMenus);
 
-        List<Product> coffeeProducts = new ArrayList<>();
-        coffeeProducts.add(new Product("에스프레소", "Espresso", 2500));
+        List<Product> coffeeProducts = new ArrayList<>(); // 특정 카테고리 안 상품의 정보를 담을 리스트 선언(Product 생성자 이용)
+        coffeeProducts.add(new Product("에스프레소", "Espresso", 2500)); // 리스트에 각 내용 추가
         coffeeProducts.add(new Product("아메리카노", "Americano", 2500));
         coffeeProducts.add(new Product("카페라떼", "Cafe latte", 3000));
         coffeeProducts.add(new Product("카라멜마끼아또", "Caramel ..", 3500));
@@ -59,45 +54,98 @@ public class Main {
         cakeProducts.add(new Product("블레싱 초코베리", "가성비 좋은 케이크", 28000));
         cakeProducts.add(new Product("순수우유케이크", "클래식한 케이크", 27000));
 
-        Map<String, Product> products = new HashMap<>();
-//        products.put("Coffee", coffeeProducts);
-//        products.put("Beverage", beverageProducts);
-//        products.put("Bread", breadProducts);
-//        products.put("Cake", cakeProducts);
-        for (Product product : coffeeProducts) {
-            products.put(product.name, product);
-        }
-        for (Product product : beverageProducts) {
-            products.put(product.name, product);
-        }
-        for (Product product : breadProducts) {
-            products.put(product.name, product);
-        }
-        for (Product product : cakeProducts) {
-            products.put(product.name, product);
-        }
+        products.put("Coffee", coffeeProducts); // 선언한 각각의 카테고리 상품 정보를 해쉬맵에 저장
+        products.put("Beverage", beverageProducts);
+        products.put("Bread", breadProducts);
+        products.put("Cake", cakeProducts);
     }
-    static void displayMainMenu() {
-        InitialMenu();
-        menus.get("Main menu").displayMenu(menus);
+    static void displayMainMenu() { // 메인 메뉴판을 출력하는 메서드
+        InitialMenu(); // 메뉴판을 출력하기 전 메뉴판 정보 초기화
+        List<Menu> mainMenuList = menus.get("Main menu");
+        List<Menu> mainOrderList = menus.get("Order menu");
+        System.out.println("PARIS BAGUETTE에 오신걸 환영합니다.");
+        System.out.println("아래 메뉴판을 보고 메뉴를 골라 입력해주세요.\n");
+        System.out.println("[ PARIS BAGUETTE MENU ]");
+        mainMenuList.get(0).displayMenu(mainMenuList, 1);
+        System.out.println("\n[ ORDER MENU ]");
+        mainOrderList.get(0).displayMenu(mainOrderList, 5);
 
-        int choice = getUserChoice();
-        if (choice == 1) {
-            handleMainMenuChoice(choice, coffeeProducts);
+        int choice = getUserChoice(); // 메인 메뉴판에서 사용자에게 입력을 받음
+        if (choice == 1) { // 사용자의 입력 별 조건문 분기
+            handleMainMenuChoice(choice, "Coffee");
         } else if (choice == 2) {
-            handleMainMenuChoice(choice, beverageProducts);
+            handleMainMenuChoice(choice, "Beverage");
         } else if (choice == 3) {
-            handleMainMenuChoice(choice, breadProducts);
+            handleMainMenuChoice(choice, "Bread");
         } else if (choice == 4) {
-            handleMainMenuChoice(choice, cakeProducts);
-        } else {
+            handleMainMenuChoice(choice, "Cake");
+        } else if (choice == 5) {
+            showCart();
+        }
+        else {
             System.out.println("잘못된 값이 입력되었습니다. 메인 메뉴로 돌아갑니다.");
             displayMainMenu();
         }
     }
 
-    static void handleMainMenuChoice(int choice, List<Product> products) {
+    static void handleMainMenuChoice(int choice, String category) { // 상품 카테고리 선택 시 상품 정보 출력 메서드
+        List<Product> productList = products.get(category); // get 명령어를 통해 입력받은 카테고리에 맞는 데이터를 불러옴
 
+        System.out.println("\nPARIS BAGUETTE에 오신걸 환영합니다.");
+        System.out.println("아래 메뉴판을 보고 메뉴를 골라 입력해주세요.\n");
+        switch(choice){ // 사용자가 입력한 숫자에 맞는 카테고리 메뉴 표시
+            case 1:
+                System.out.println("[ Coffee MENU ]");
+                break;
+            case 2:
+                System.out.println("[ Beverage MENU ]");
+                break;
+            case 3:
+                System.out.println("[ Bread MENU ]");
+                break;
+            case 4:
+                System.out.println("[ Cake MENU ]");
+                break;
+            default:
+                System.out.println("잘못된 값이 입력되었습니다. 메인 메뉴로 돌아갑니다.");
+                displayMainMenu();
+                return;
+        }
+        productList.get(0).displayProduct(productList); // displayProduct 메서드를 통해 상품 정보 출력
+
+        int choice2 = getUserChoice(); // 사용자에게 장바구니에 담을 상품을 입력 받음
+        handleOrderChoice(productList, choice2); // 주문 확인창으로 넘어감
+    }
+
+    static void handleOrderChoice(List<Product> productList,int choice){
+        productList.get(0).displayOrder(productList, choice); // 주문 확인창 출력
+        int choice3 = getUserChoice(); // 다시 사용자에게 주문 여부를 입력 받음
+        handleAddOrder(choice3, productList); // 주문 결과 창으로 넘어감
+    }
+    static void handleAddOrder(int choice, List<Product> productList){
+        if(choice == 1){ // 입력받은 숫자에 따라 주문 결과를 출력
+            productList.get(0).addCart(); // 주문을 입력받았다면 장바구니에 상품을 추가
+            System.out.println("상품이 장바구니에 담겼습니다. 메인 메뉴판으로 돌아갑니다.");
+            displayMainMenu();
+        }else if(choice == 2){
+            System.out.println("취소하셨습니다. 메인 메뉴판으로 돌아갑니다.");
+            displayMainMenu();
+        }else{
+            System.out.println("잘못된 값이 입력되었습니다. 메인 메뉴판으로 돌아갑니다.");
+            displayMainMenu();
+        }
+    }
+
+    static void showCart(){
+        System.out.println("아래와 같이 주문 하시겠습니까?\n");
+        System.out.println("[ Orders ]");
+        for(int i =0; i<Cart.size(); i++){
+            Product product = Cart.get(i);
+            System.out.println(product.name + "   |" + product.price + "원   |" + product.description);
+        }
+        System.out.println("[ Total ]");
+        System.out.println(total_price + "원\n");
+        System.out.println("1. 주문      2. 메뉴판");
     }
 
     static int getUserChoice() {
