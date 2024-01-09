@@ -8,8 +8,10 @@ public class Main {
     static Map<String, List<Product>> products = new HashMap<>();
     static List<Order> Cart = new ArrayList<>();
     static int total_price;
+    static int total_sales;
 
     static int order_number;
+    static List<Order> total_sold_product = new ArrayList<>();
 
 
     public static void main(String[] args) {
@@ -65,7 +67,7 @@ public class Main {
         InitialMenu(); // 메뉴판을 출력하기 전 메뉴판 정보 초기화
         List<Menu> mainMenuList = menus.get("Main menu");
         List<Menu> mainOrderList = menus.get("Order menu");
-        System.out.println("PARIS BAGUETTE에 오신걸 환영합니다.");
+        System.out.println("\n\n\nPARIS BAGUETTE에 오신걸 환영합니다.");
         System.out.println("아래 메뉴판을 보고 메뉴를 골라 입력해주세요.\n");
         System.out.println("[ PARIS BAGUETTE MENU ]");
         mainMenuList.get(0).displayMenu(mainMenuList, 1);
@@ -85,6 +87,8 @@ public class Main {
             showCart();
         } else if (choice == 6) {
             cancelOrder();
+        } else if (choice == 0){
+            totalSaleInfo();
         }
         else {
             System.out.println("잘못된 값이 입력되었습니다. 메인 메뉴로 돌아갑니다.");
@@ -132,9 +136,6 @@ public class Main {
         int choice3 = getUserChoice(); // 다시 사용자에게 주문 여부를 입력 받음
         handleAddOrder(choice3, productList); // 주문 결과 창으로 넘어감
     }
-    static void handleOrderChoice(List<Product> productList){
-
-    }
 
     static void addShotOption(Product product){
         System.out.println(product.name + "   |" + product.price + "원   |" + product.description);
@@ -160,11 +161,12 @@ public class Main {
     }
 
     static void showCart(){
-        System.out.println("아래와 같이 주문 하시겠습니까?\n");
+        System.out.println("\n아래와 같이 주문 하시겠습니까?\n");
         System.out.println("[ Orders ]");
         for(int i =0; i<Cart.size(); i++){
             Order order = Cart.get(i);
-            System.out.println(order.name + "   |" + order.price + "원   |" + order.quantity + "개   |" +order.description);
+            System.out.printf("%-3d. %-20s | %-5d원 | %-3d개 | %s%n", i + 1, order.name, order.price, order.quantity, order.description);
+//            System.out.printf("%-3d. %-20s | %-5d원 | %s%n", order.name + "|" + order.price + "원   |" + order.quantity + "개   |" +order.description);
         }
         System.out.println("[ Total ]");
         System.out.println(total_price + "원\n");
@@ -182,9 +184,15 @@ public class Main {
     }
 
     static void completeOrder(){
-        System.out.println("주문이 완료되었습니다!");
+        System.out.println("\n주문이 완료되었습니다!");
 
-        order_number++;
+        order_number++; // 대기번호 1 증가
+        for(int i = 0; i<Cart.size(); i++){ // 장바구니에 담긴 물품들을 비우기 전에, 총 판매물품 리스트에 기록
+            Order order = Cart.get(i);
+            total_sold_product.add(new Order(order.name, order.price, order.quantity, order.description));
+        }
+        total_sales += total_price; // 총 매출에 판매 금액을 추가
+
         Cart.clear();
         total_price = 0;
         System.out.printf("대기번호는 [ %d ] 번 입니다.", order_number);
@@ -221,5 +229,25 @@ public class Main {
     static int getUserChoice() {
         System.out.print("원하시는 요청을 골라주세요 : ");
         return scanner.nextInt();
+    }
+
+    static void totalSaleInfo(){
+        System.out.println("[ 총 판매상품 목록 현황 ]");
+        System.out.println("현재까지 총 판매된 상품 목록은 아래와 같습니다.");
+        for(int i =0; i<total_sold_product.size(); i++){
+            System.out.printf("- %-20s | %-3d개 | %-5d원%n", total_sold_product.get(i).name, total_sold_product.get(i).quantity, total_sold_product.get(i).price);
+
+//            System.out.println("- " + total_sold_product.get(i).name + "   |" + total_sold_product.get(i).quantity + "개   |" + total_sold_product.get(i).price + "원");
+        }
+        System.out.println("[ 총 판매금액 현황 ]\n");
+        System.out.printf("현재까지 총 판매된 금액은 [ %d 원 ] 입니다.\n", total_sales);
+        System.out.println("1. 돌아가기");
+        int choice = getUserChoice();
+        if(choice == 1){
+            displayMainMenu();
+        }else {
+            System.out.println("잘못된 값이 입력되었습니다. 메인 메뉴판으로 돌아갑니다");
+            displayMainMenu();
+        }
     }
 }

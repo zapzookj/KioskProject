@@ -15,7 +15,7 @@ public class Menu {
 
         for (int i = 0; i < menuList.size(); i++) {
             Menu menu = menuList.get(i);
-            System.out.println((i + startnumber) + ". " + menu.name + "   | " + menu.description);
+            System.out.printf("%-1d. %-10s | %s%n", i + startnumber, menu.name, menu.description);
         }
 
 //        System.out.println(menus.get("Main menu"));
