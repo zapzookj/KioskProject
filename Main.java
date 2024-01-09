@@ -118,6 +118,12 @@ public class Main {
         productList.get(0).displayProduct(productList); // displayProduct 메서드를 통해 상품 정보 출력
 
         int choice2 = getUserChoice(); // 사용자에게 장바구니에 담을 상품을 입력 받음
+//        for(Product product : productList){
+//            if(product.equals("아메리카노")){
+//                addShotOption();
+//                break;
+//            }
+//        }
         handleOrderChoice(productList, choice2); // 주문 확인창으로 넘어감
     }
 
@@ -125,6 +131,19 @@ public class Main {
         productList.get(0).displayOrder(productList, choice); // 주문 확인창 출력
         int choice3 = getUserChoice(); // 다시 사용자에게 주문 여부를 입력 받음
         handleAddOrder(choice3, productList); // 주문 결과 창으로 넘어감
+    }
+    static void handleOrderChoice(List<Product> productList){
+
+    }
+
+    static void addShotOption(Product product){
+        System.out.println(product.name + "   |" + product.price + "원   |" + product.description);
+        System.out.println("커피에 샷을 추가하시겠습니까?");
+        System.out.println("1. One shot add(500원)     2. Two shot add(1000원)     3. 샷 추가 X");
+        int choice = getUserChoice();
+        if(choice == 1 || choice == 2){
+            product.addShot(product, choice);
+        }
     }
     static void handleAddOrder(int choice, List<Product> productList){
         if(choice == 1){ // 입력받은 숫자에 따라 주문 결과를 출력
