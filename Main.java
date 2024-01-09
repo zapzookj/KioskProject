@@ -6,7 +6,7 @@ public class Main {
     static Scanner scanner = new Scanner(System.in);
     static Map<String, List<Menu>> menus = new HashMap<>();
     static Map<String, List<Product>> products = new HashMap<>();
-    static List<Product> Cart = new ArrayList<>();
+    static List<Order> Cart = new ArrayList<>();
     static int total_price;
 
     static int order_number;
@@ -144,8 +144,8 @@ public class Main {
         System.out.println("아래와 같이 주문 하시겠습니까?\n");
         System.out.println("[ Orders ]");
         for(int i =0; i<Cart.size(); i++){
-            Product product = Cart.get(i);
-            System.out.println(product.name + "   |" + product.price + "원   |" + product.description);
+            Order order = Cart.get(i);
+            System.out.println(order.name + "   |" + order.price + "원   |" + order.quantity + "개   |" +order.description);
         }
         System.out.println("[ Total ]");
         System.out.println(total_price + "원\n");
