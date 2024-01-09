@@ -9,6 +9,8 @@ public class Main {
     static List<Product> Cart = new ArrayList<>();
     static int total_price;
 
+    static int order_number;
+
 
     public static void main(String[] args) {
         displayMainMenu();
@@ -148,8 +150,33 @@ public class Main {
         System.out.println("[ Total ]");
         System.out.println(total_price + "원\n");
         System.out.println("1. 주문      2. 메뉴판");
+
+        int choice = getUserChoice();
+        if(choice == 1){
+            completeOrder();
+        }else if(choice == 2){
+            displayMainMenu();
+        }else{
+            System.out.println("잘못된 값이 입력되었습니다. 메인 메뉴판으로 돌아갑니다.");
+            displayMainMenu();
+        }
     }
 
+    static void completeOrder(){
+        System.out.println("주문이 완료되었습니다!");
+
+        order_number++;
+        Cart.clear();
+        total_price = 0;
+        System.out.printf("대기번호는 [ %d ] 번 입니다.", order_number);
+        System.out.println("(3초후 메뉴판으로 돌아갑니다.)");
+        try{
+            Thread.sleep(3000);
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        displayMainMenu();
+    }
     static void cancelOrder(){
         System.out.println("진행중인 주문을 취소하시겠습니까?");
         System.out.println("1. 확인     2. 취소");

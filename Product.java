@@ -1,7 +1,5 @@
 package KioskProject;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 public class Product extends Menu{
     int price;
     Product(String name, String description, int price){
