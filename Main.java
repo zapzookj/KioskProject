@@ -65,14 +65,15 @@ public class Main {
     }
     static void displayMainMenu() { // 메인 메뉴판을 출력하는 메서드
         InitialMenu(); // 메뉴판을 출력하기 전 메뉴판 정보 초기화
-        List<Menu> mainMenuList = menus.get("Main menu");
-        List<Menu> mainOrderList = menus.get("Order menu");
+        clearConsole();
+        List<Menu> mainMenuList = menus.get("Main menu");  // 상품의 카테고리 데이터 저장
+        List<Menu> mainOrderList = menus.get("Order menu");  // Order menu 데이터 저장
         System.out.println("\n\n\nPARIS BAGUETTE에 오신걸 환영합니다.");
         System.out.println("아래 메뉴판을 보고 메뉴를 골라 입력해주세요.\n");
         System.out.println("[ PARIS BAGUETTE MENU ]");
-        mainMenuList.get(0).displayMenu(mainMenuList, 1);
+        mainMenuList.getFirst().displayMenu(mainMenuList, 1);
         System.out.println("\n[ ORDER MENU ]");
-        mainOrderList.get(0).displayMenu(mainOrderList, 5);
+        mainOrderList.getFirst().displayMenu(mainOrderList, 5);
 
         int choice = getUserChoice(); // 메인 메뉴판에서 사용자에게 입력을 받음
         if (choice == 1) { // 사용자의 입력 별 조건문 분기
@@ -97,8 +98,8 @@ public class Main {
     }
 
     static void handleMainMenuChoice(int choice, String category) { // 상품 카테고리 선택 시 상품 정보 출력 메서드
-        List<Product> productList = products.get(category); // get 명령어를 통해 입력받은 카테고리에 맞는 데이터를 불러옴
-
+        List<Product> productList = products.get(category); // products 해쉬맵의 키값에 입력받은 카테고리를 넣어 해당 상품목록 저장
+        clearConsole();
         System.out.println("\nPARIS BAGUETTE에 오신걸 환영합니다.");
         System.out.println("아래 메뉴판을 보고 메뉴를 골라 입력해주세요.\n");
         switch(choice){ // 사용자가 입력한 숫자에 맞는 카테고리 메뉴 표시
@@ -119,36 +120,26 @@ public class Main {
                 displayMainMenu();
                 return;
         }
-        productList.get(0).displayProduct(productList); // displayProduct 메서드를 통해 상품 정보 출력
+        productList.getFirst().displayProduct(productList); // displayProduct 메서드를 통해 상품 정보 출력
 
         int choice2 = getUserChoice(); // 사용자에게 장바구니에 담을 상품을 입력 받음
-//        for(Product product : productList){
-//            if(product.equals("아메리카노")){
-//                addShotOption();
-//                break;
-//            }
-//        }
         handleOrderChoice(productList, choice2); // 주문 확인창으로 넘어감
     }
 
     static void handleOrderChoice(List<Product> productList,int choice){
+        clearConsole();
         productList.get(0).displayOrder(productList, choice); // 주문 확인창 출력
         int choice3 = getUserChoice(); // 다시 사용자에게 주문 여부를 입력 받음
         handleAddOrder(choice3, productList); // 주문 결과 창으로 넘어감
     }
 
     static int addShotOption(Product product){
+        clearConsole();
         System.out.println(product.name + "   |" + product.price + "원   |" + product.description);
         System.out.println("커피에 샷을 추가하시겠습니까?");
         System.out.println("1. One shot add(500원)     2. Two shot add(1000원)     3. 샷 추가 X");
         int choice = getUserChoice();
         return choice;
-//        if(choice == 1 || choice == 2){
-//            product.addShot(product, choice);
-////            System.out.println(product.name + "   |" + product.price + "   |" + product.description); // 다 잘 동작하다가 여기서 무조건 에스프레소가 출력됨
-////            System.out.println("위 메뉴를 장바구니에 추가하시겠습니까?");
-////            System.out.println("1. 확인      2. 취소");
-//        }
     }
     static void handleAddOrder(int choice, List<Product> productList){
         if(choice == 1){ // 입력받은 숫자에 따라 주문 결과를 출력
@@ -165,6 +156,7 @@ public class Main {
     }
 
     static void showCart(){
+        clearConsole();
         System.out.println("\n아래와 같이 주문 하시겠습니까?\n");
         System.out.println("[ Orders ]");
         for(int i =0; i<Cart.size(); i++){
@@ -188,6 +180,7 @@ public class Main {
     }
 
     static void completeOrder(){
+        clearConsole();
         System.out.println("\n주문이 완료되었습니다!");
 
         order_number++; // 대기번호 1 증가
@@ -209,6 +202,7 @@ public class Main {
         displayMainMenu();
     }
     static void cancelOrder(){
+        clearConsole();
         System.out.println("진행중인 주문을 취소하시겠습니까?");
         System.out.println("1. 확인     2. 취소");
         int choice = getUserChoice();
@@ -235,7 +229,12 @@ public class Main {
         return scanner.nextInt();
     }
 
+    static void clearConsole() {
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    }
+
     static void totalSaleInfo(){
+        clearConsole();
         System.out.println("[ 총 판매상품 목록 현황 ]");
         System.out.println("현재까지 총 판매된 상품 목록은 아래와 같습니다.");
         for(int i =0; i<total_sold_product.size(); i++){

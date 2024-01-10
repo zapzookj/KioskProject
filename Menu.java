@@ -17,11 +17,5 @@ public class Menu {
             Menu menu = menuList.get(i);
             System.out.printf("%-1d. %-10s | %s%n", i + startnumber, menu.name, menu.description);
         }
-
-//        System.out.println(menus.get("Main menu"));
-//        System.out.println(menus2.get("Order menu"));
-//        for (Map.Entry<String, List<Menu>> entry : menus.entrySet()) {
-//            System.out.println(entry.getKey() + ". " + entry.getValue().name + "   | " + entry.getValue().description);
-//        }
     }
 }

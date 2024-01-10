@@ -1,6 +1,4 @@
 package KioskProject;
-import java.util.ArrayList;
-import java.util.List;
 public class Order{
     String name;
     String description;
